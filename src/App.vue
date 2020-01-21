@@ -1,32 +1,52 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+    <router-view />
+    <BackTop :height="100" :bottom="200">
+      <div class="top__">返回顶端</div>
+    </BackTop>
   </div>
 </template>
-
+<script>
+export default {
+  name: "",
+  components: {},
+  props: {},
+  data() {
+    return {};
+  },
+  methods: {},
+  beforeMount() {
+    this.$store.state.userInfo = JSON.parse(localStorage.getItem("loginMsg"));
+    this.$store.state.city = JSON.parse(localStorage.getItem("city"));
+  },
+  mounted() {},
+  created() {},
+  filters: {},
+  computed: {},
+  watch: {},
+  directives: {}
+};
+</script>
 <style lang="scss">
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+  height: 120vh;
+  font-size: 16px;
 }
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+li {
+  list-style: none;
+}
+.flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.top__ {
+  padding: 10px;
+  background: rgba(0, 153, 229, 0.7);
+  color: #fff;
+  text-align: center;
+  border-radius: 2px;
 }
 </style>
+
