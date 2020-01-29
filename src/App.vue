@@ -48,5 +48,10 @@ li {
   text-align: center;
   border-radius: 2px;
 }
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 </style>
 
