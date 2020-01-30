@@ -67,6 +67,8 @@ export default {
         margin-right: 22px;
       }
       .nav-aside {
+        transform: translate3d(0, 59px, 0);
+        transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
       }
     }
   }

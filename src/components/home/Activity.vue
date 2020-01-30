@@ -31,9 +31,8 @@ export default {
 
 <style scoped lang='scss'>
 .box {
-  overflow: hidden;
-  position: relative;
   z-index: 0;
+  margin-bottom: 30px;
   margin-top: 25px;
   box-sizing: border-box;
   border: 1px solid rgba(0, 0, 0, 0.14);
@@ -41,15 +40,16 @@ export default {
   background: #fff;
   box-shadow: 0 3px 8px -6px rgba(0, 0, 0, 0.1);
   .content {
-    position: relative;
-    box-sizing: border-box;
     width: 25%;
-    text-align: center;
-    border-left: rgba(0, 0, 0, 0.1) 0.4px solid;
-    border-right: rgba(0, 0, 0, 0.1) 0.4px solid;
+
+    // border-left: rgba(0, 0, 0, 0.1) 0.4px solid;
+    border: rgba(0, 0, 0, 0.1) 0.4px solid;
     .img {
+      width: 100%;
+      max-height: 199.4px;
       img {
         width: 100%;
+        height: 100%;
       }
     }
   }

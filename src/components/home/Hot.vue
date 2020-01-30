@@ -1,24 +1,10 @@
 <template>
   <div>
-    <div class="content">
-      <Titles>热门活动</Titles>
-      <div class="hot flex">
+    <div class="gray-box">
+      <Titles>{{name}}</Titles>
+      <div class="hots flex">
         <div class="good-item" v-for="(item,index) in hotData" :key="index">
-          <div class="good-img flex">
-            <img :src="item.productImageBig" :alt="item.productName" />
-          </div>
-          <div class="good-title">{{item.productName}}</div>
-          <div class="sub-title ellipsis">{{item.subTitle}}</div>
-          <div class="good-price">
-            <div class="bt flex">
-              <Button class="bt-de">查看详情</Button>
-              <Button type="info">加入购物车</Button>
-            </div>
-            <div class="price-number">
-              <span class="price-">￥</span>
-              <span>{{Number(item.salePrice).toFixed(2)}}</span>
-            </div>
-          </div>
+          <ShopDe :ShopDe="item"></ShopDe>
         </div>
       </div>
     </div>
@@ -27,6 +13,7 @@
 
 <script>
 import Titles from "../home/Title";
+import ShopDe from "./ShopDe";
 export default {
   data() {
     return {
@@ -34,12 +21,17 @@ export default {
     };
   },
   components: {
-    Titles
+    Titles,
+    ShopDe
   },
   props: {
     hotData: {
       type: Array,
       default: () => []
+    },
+    name: {
+      type: String,
+      default: ""
     }
   },
   methods: {},
@@ -53,23 +45,27 @@ export default {
 .bt-de {
   margin-right: 10px;
 }
-.content {
-  margin-top: 30px;
-  background: white;
-  .hot {
-    .good-item:hover {
-      transform: translateY(-3px);
-      box-shadow: 1px 1px 20px #999;
-      cursor: pointer;
-    }
+.gray-box {
+  position: relative;
+  margin-bottom: 30px;
+  overflow: hidden;
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #dcdcdc;
+  border-color: rgba(0, 0, 0, 0.14);
+  box-shadow: 0 3px 8px -6px rgba(0, 0, 0, 0.1);
+  .hots {
+    border-radius: 0 0 8px 8px;
+    // overflow: hidden;
     .good-item {
       background: #fff;
       width: 50%;
       transition: all 0.5s;
       .good-img {
+        width: 100%;
         img {
           margin: 50px auto 10px;
-          width: 35%;
+          width: 100%;
         }
       }
       .good-title {
