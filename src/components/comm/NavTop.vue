@@ -12,12 +12,9 @@
           <div>
             <Divider type="vertical" />
           </div>
+
           <div class="nav-aside flex">
-            <div class="user pr"></div>
-            <div class="shop flex">
-              <div class="cart-img"></div>
-              <div class="cart-num">0</div>
-            </div>
+            <NavAside></NavAside>
           </div>
         </div>
       </div>
@@ -26,11 +23,14 @@
 </template>
 
 <script>
+import NavAside from "./NavAside";
 export default {
   data() {
     return {};
   },
-  components: {},
+  components: {
+    NavAside
+  },
   props: {},
   methods: {},
   mounted() {},
@@ -87,29 +87,10 @@ export default {
   color: rgb(53, 52, 52);
   font-size: 12px;
 }
-.shop {
-  position: relative;
-  margin-left: 21px;
-  width: 61px;
-  z-index: 99;
-  height: 19px;
-}
-.cart-img {
-  width: 30px;
-  height: 100%;
-  background: url("../../assets/images/account-icon@2x.32d87deb02b3d1c3cc5bcff0c26314ac.png")
-    0 -22px;
-  background-size: 240px 107px;
-  background-position: -150px -22px;
-}
-.user {
-  margin-left: 41px;
-  width: 20px;
-  height: 20px;
-  background: url("../../assets/images/account-icon@2x.32d87deb02b3d1c3cc5bcff0c26314ac.png") -155px
-    0;
-  background-size: 240px 107px;
-  transition: none;
+.nav-aside:hover {
+  color: #6b95ea;
+  // background: #635f5f;
+  cursor: pointer;
 }
 
 .list-item {

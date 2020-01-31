@@ -23,6 +23,28 @@ const routes = [{
         }],
     },
     {
+        path: "/",
+        component: () =>
+            import ( /* webpackChunkName: "about" */ '../views/LoginComm'),
+        children: [{
+            path: '/login',
+            name: "login",
+            component: () =>
+                import ( /* webpackChunkName: "about" */ '../views/login/Login.vue'),
+            meta: {
+                title: '登录'
+            }
+        }, {
+            path: '/register',
+            name: "register",
+            component: () =>
+                import ( /* webpackChunkName: "about" */ '../views/register/Register.vue'),
+            meta: {
+                title: '注册'
+            }
+        }],
+    },
+    {
         path: '/about',
         name: 'about',
         // route level code-splitting
@@ -37,6 +59,21 @@ const router = new VueRouter({
     mode: 'history',
     base: process.env.BASE_URL,
     routes
+})
+
+router.beforeEach((to, from, next) => {
+    document.title = to.meta.title
+        // let loginMsg = localStorage.getItem('loginMsg')
+        // if (to.path==='/login')
+        //     next()
+        // else
+        //     loginMsg ? next():next('/login')
+        // if (to.path==='/edit'||to.path==='/look') {
+        //     let a=to.query._id
+        //     a ? next():next('/published')
+        // }
+    next()
+
 })
 
 export default router

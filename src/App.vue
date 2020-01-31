@@ -4,6 +4,10 @@
     <BackTop :height="100" :bottom="200">
       <div class="top__">返回顶端</div>
     </BackTop>
+    <div class="message___">
+      <i class="iconfont icon-xiaoxi img"></i>
+      <!-- <img src="./assets/images/massage.gif" alt /> -->
+    </div>
   </div>
 </template>
 <script>
@@ -33,7 +37,7 @@ export default {
 </script>
 <style lang="scss">
 #app {
-  height: 120vh;
+  height: 100vh;
   font-size: 16px;
 }
 li {
@@ -56,6 +60,21 @@ li {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.message___ {
+  z-index: 10;
+  position: fixed;
+  cursor: pointer;
+  bottom: 100px;
+  right: 30px;
+  font-size: 30px;
+  color: #f4364c;
+  // box-shadow: 1px 1px 20px #999;
+
+  .img {
+    // fons
+    font-size: 45px;
+  }
 }
 </style>
 

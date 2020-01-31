@@ -16,11 +16,7 @@
           <li class="nav-item">商用授权</li>
         </ul>
         <div id="nav-show" class="nav-aside flex" v-show="isFixed" :class="{'show-nav' : isFixed}">
-          <div class="user pr"></div>
-          <div class="shop flex">
-            <div class="cart-img"></div>
-            <div class="cart-num">0</div>
-          </div>
+          <NavAside></NavAside>
         </div>
       </div>
     </div>
@@ -28,6 +24,7 @@
 </template>
 
 <script>
+import NavAside from "./NavAside";
 export default {
   data() {
     return {
@@ -35,7 +32,9 @@ export default {
       offsetTop: 0
     };
   },
-  components: {},
+  components: {
+    NavAside
+  },
   props: {},
   methods: {
     initHeight() {
@@ -92,7 +91,7 @@ to {
 .is_fixed {
   position: fixed !important;
   top: 0;
-  z-index: 999;
+  z-index: 999 !important;
 }
 .nav-sub {
   position: relative;

@@ -19,6 +19,22 @@ export default {
     allGoods({ page, size, sort, priceGt, priceLte }) {
         return service.get('/goods/allGoods', { page, size, sort, priceGt, priceLte })
     },
+
+    // 用户注册
+    register({ username, password }) {
+        return service.post('/users/register ', {
+            username,
+            password,
+        })
+    },
+    login({ username, password }) {
+        return service.post('/users/login ', {
+            username,
+            password,
+        })
+    },
+
+
     // 获取定位
     position() {
         return service.get('/position')
@@ -31,20 +47,7 @@ export default {
     allCitys(id) {
         return service.get(`citys/${id}`)
     },
-    // 用户注册
-    register({ username, password, email }) {
-        return service.post('/users/register ', {
-            username,
-            password,
-            email,
-        })
-    },
-    login({ username, password }) {
-        return service.post('/users/login ', {
-            username,
-            password,
-        })
-    },
+
     // 商铺详情
     products(shopName, city) {
         return service.get(`/products?keyword=${shopName}&city=${city}`)

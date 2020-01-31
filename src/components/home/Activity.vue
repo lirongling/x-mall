@@ -35,13 +35,13 @@ export default {
   margin-bottom: 30px;
   margin-top: 25px;
   box-sizing: border-box;
-  border: 1px solid rgba(0, 0, 0, 0.14);
-  border-radius: 8px;
+  // border: 1px solid rgba(0, 0, 0, 0.14);
+  border-radius: 8px !important;
+  overflow: hidden;
   background: #fff;
   box-shadow: 0 3px 8px -6px rgba(0, 0, 0, 0.1);
   .content {
     width: 25%;
-
     // border-left: rgba(0, 0, 0, 0.1) 0.4px solid;
     border: rgba(0, 0, 0, 0.1) 0.4px solid;
     .img {
