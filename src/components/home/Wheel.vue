@@ -1,7 +1,15 @@
 <template>
   <div>
     <div class="container">
-      <Carousel autoplay v-model="start" loop :autoplay-speed="autoplay" class="bg">
+      <Carousel
+        autoplay
+        v-model="start"
+        loop
+        :autoplay-speed="autoplay"
+        :radius-dot="true"
+        class="bg"
+        @on-click="goodsDetails"
+      >
         <CarouselItem v-for="(item) in panelContents" :key="item.id">
           <div class="img">
             <img :src="item.picUrl" :alt="item.productName" />
@@ -39,7 +47,17 @@ export default {
       default: () => []
     }
   },
-  methods: {},
+  methods: {
+    // 跳转到详情页
+    goodsDetails(index) {
+      const { href } = this.$router.resolve({
+        name: "goodsDetails",
+        query: { productId: this.panelContents[index].productId }
+      });
+      window.open(href, "_blank");
+      // window.open(`/goodsDetails?productId=${productId}`, "_blank");
+    }
+  },
   mounted() {
     console.log(this.panelContents);
   },
@@ -52,16 +70,19 @@ export default {
 .container {
   margin: 20px auto;
   background-size: 100% 100%;
-  border-radius: 10px;
+  border-radius: 10px !important;
   transform-style: preserve-3d;
   transform-origin: 50% 50%;
   transform: rotateY(0deg) rotateX(0deg);
   max-width: 1220px;
   min-width: 1080px;
+  overflow: hidden;
   cursor: pointer;
   perspective: 3000px;
   position: relative;
   .bg {
+    border-radius: 10px !important;
+    overflow: hidden;
     position: relative;
     margin: 20px auto;
     background-size: 100% 100%;
@@ -69,18 +90,17 @@ export default {
     transform-style: preserve-3d;
     transform-origin: 50% 50%;
     transform: rotateY(0deg) rotateX(0deg);
-    border-radius: 10px;
   }
   .img {
     position: relative;
     max-height: 500px;
-    border-radius: 10px;
+    border-radius: 10px !important;
     min-height: 490px;
   }
 
   img {
     position: absolute;
-    width: 100%;
+    width: 101%;
     max-width: 1220px;
     min-width: 1080px;
     border-radius: 10px;

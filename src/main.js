@@ -11,6 +11,7 @@ import ViewUI from 'view-design';
 import 'view-design/dist/styles/iview.css';
 import service from "../src/http"
 import dayjs from 'dayjs'
+import './assets/js/excitLogin.js'
 
 
 // Vue.use(ElementUI)

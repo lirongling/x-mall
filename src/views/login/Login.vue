@@ -21,10 +21,10 @@
           <FormItem>
             <Code></Code>
           </FormItem>
-          <FormItem>
+          <FormItem prop="single">
             <div class="pr flex">
               <div class="auto-login">
-                <Checkbox v-model="single">记住密码</Checkbox>
+                <Checkbox v-model="formCustom.single">记住密码</Checkbox>
               </div>
               <div class="bts">
                 <a
@@ -41,10 +41,15 @@
           </FormItem>
           <FormItem>
             <div class="btn">
-              <Button type="primary" long>登录</Button>
+              <Button
+                type="primary"
+                long
+                :disabled="!(userCode&&passCode)"
+                @click="handleSubmit('formCustom')"
+              >登录</Button>
               <br />
               <br />
-              <Button long>返回</Button>
+              <Button long @click="back">返回</Button>
             </div>
           </FormItem>
           <FormItem>
@@ -62,33 +67,41 @@ import ThirdParty from "../../components/login/ThirdParty";
 export default {
   data() {
     const validateUser = (rule, value, callback) => {
+      this.userCode = false;
       let a = /^[\u4e00-\u9fa5]{0,}$/;
       if (value === "") {
         callback(new Error("请输入用户名"));
       } else if (a.test(value)) {
         callback(new Error("用户名不能为中文"));
       } else {
+        this.userCode = true;
         callback();
       }
     };
     const validatePass = (rule, value, callback) => {
+      this.passCode = false;
       let a = /^[\u4e00-\u9fa5]{0,}$/;
       if (value === "") {
         callback(new Error("请输入密码"));
-      } else if (value.length < 6) {
-        callback(new Error("密码长度不能小于六位"));
+      } else if (value.length < 3) {
+        callback(new Error("密码长度不能小于三位"));
       } else if (a.test(value)) {
         callback(new Error("密码不能为中文"));
       } else {
+        this.passCode = true;
         callback();
       }
     };
+
     return {
-      single: false,
       labelWith: 0,
+      userCode: false,
+      passCode: false,
+      passsCode: false,
       formCustom: {
         username: "",
-        password: ""
+        password: "",
+        single: false
       },
       ruleCustom: {
         username: [{ validator: validateUser, trigger: "blur" }],
@@ -106,7 +119,56 @@ export default {
   methods: {
     register() {
       this.$router.push("/register");
+    },
+    handleSubmit(name) {
+      this.$refs[name].validate(valid => {
+        if (valid) {
+          this.login();
+        } else {
+          this.$Message.error("Fail!");
+        }
+      });
+    },
+    // 请求接口验证
+    login() {
+      let userMsg = {
+        username: this.formCustom.username,
+        password: this.formCustom.password
+      };
+      this.$api
+        .login(userMsg)
+        .then(res => {
+          if (res.code === 200) {
+            this.$router.push("/");
+            this.$Message.success("恭喜你，登录成功！");
+            localStorage.setItem("loginMsg", JSON.stringify(userMsg));
+            localStorage.setItem("lastTime", new Date().getTime());
+            this.$store.state.userInfo = userMsg;
+          } else if (res.code === 500) {
+            this.$Message.warning(res.msg);
+          } else {
+            this.$Message.error("未知错误");
+          }
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    // 返回按钮
+    back() {
+      this.$router.go(-1);
     }
+  },
+  created() {},
+  beforeRouteEnter: (to, from, next) => {
+    next(vm => {
+      localStorage.setItem("login", "1");
+    });
+  },
+  beforeRouteLeave: (to, from, next) => {
+    localStorage.removeItem("login");
+    next();
   },
   mounted() {},
   watch: {},

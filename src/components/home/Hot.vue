@@ -3,7 +3,12 @@
     <div class="gray-box">
       <Titles>{{name}}</Titles>
       <div class="hots flex">
-        <div class="good-item" v-for="(item,index) in hotData" :key="index">
+        <div
+          class="good-item"
+          v-for="(item,index) in hotData"
+          :key="index"
+          @click="goodsDetails(item.productId)"
+        >
           <ShopDe :ShopDe="item"></ShopDe>
         </div>
       </div>
@@ -34,7 +39,17 @@ export default {
       default: ""
     }
   },
-  methods: {},
+  methods: {
+    // 跳转到详情页
+    goodsDetails(productId) {
+      const { href } = this.$router.resolve({
+        name: "goodsDetails",
+        query: { productId: productId }
+      });
+      window.open(href, "_blank");
+      // window.open(`/goodsDetails?productId=${productId}`, "_blank");
+    }
+  },
   mounted() {},
   watch: {},
   computed: {}

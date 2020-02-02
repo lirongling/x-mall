@@ -20,8 +20,14 @@ export default {
   },
   methods: {},
   beforeMount() {
-    this.$store.state.userInfo = JSON.parse(localStorage.getItem("loginMsg"));
-    this.$store.state.city = JSON.parse(localStorage.getItem("city"));
+    if (this.$route.name !== "login") {
+      localStorage.removeItem("login");
+    }
+
+    if (JSON.parse(localStorage.getItem("loginMsg"))) {
+      this.$store.state.userInfo = JSON.parse(localStorage.getItem("loginMsg"));
+    }
+    // this.$store.state.city = JSON.parse(localStorage.getItem("city"));
   },
   mounted() {
     this.$router.afterEach((to, from, next) => {
@@ -39,6 +45,11 @@ export default {
 #app {
   height: 100vh;
   font-size: 16px;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0;
 }
 li {
   list-style: none;

@@ -16,8 +16,16 @@ export default {
     // 3. sort: 排序方式 1 为升序 - 1 为降序
     // 4. priceGt: 价格区间 从多少开始
     // 5. priceLte: 价格区间 到哪结束
-    allGoods({ page, size, sort, priceGt, priceLte }) {
-        return service.get('/goods/allGoods', { page, size, sort, priceGt, priceLte })
+    allGoods(page, size, sort, priceGt, priceLte) {
+        return service.get(`/goods/allGoods?page=${page}&&size=${size}&&sort=${sort}&&priceGt=${priceGt}&&priceLte=${priceLte}`)
+    },
+    // 搜索商品
+    search(keyword) {
+        return service.get(`goods/search?keyword=${keyword}`)
+    },
+    // 商品详情
+    goodsDetails(productId) {
+        return service.get(`goods/detail?productId=${productId}`)
     },
 
     // 用户注册
@@ -63,12 +71,6 @@ export default {
         return service.get('/recommend')
     },
 
-    search(value, page = 1) {
-        return service.post('/search', {
-            value,
-            page
-        })
-    },
     // ===============================================================================================================
     /**
      * 分类页面(Category)所有接口

@@ -1,10 +1,12 @@
 <template>
   <div class="comm">
-    <div class="header-box">
+    <div>
       <NavTop></NavTop>
       <NavSub></NavSub>
     </div>
-    <router-view></router-view>
+    <div class="container">
+      <router-view></router-view>
+    </div>
     <Footer></Footer>
   </div>
 </template>
@@ -33,5 +35,10 @@ export default {
 <style scoped lang='scss'>
 .comm {
   background: #ededed;
+}
+.container {
+  max-width: 1220px;
+  min-width: 1080px;
+  margin: 0 auto;
 }
 </style>

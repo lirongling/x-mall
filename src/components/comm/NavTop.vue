@@ -2,17 +2,62 @@
   <div>
     <div class="container">
       <div class="content flex">
-        <div class="nav-logo"></div>
+        <a href="/">
+          <div class="nav-logo"></div>
+        </a>
+
         <div class="right-box flex">
           <div class="nav-list flex">
-            <Input suffix="ios-search" placeholder="请输入商品信息" style="width: 305px " />
+            <div class="searchsss">
+              <div>
+                <Input
+                  suffix="ios-search"
+                  placeholder="请输入商品信息"
+                  v-model="searchText"
+                  @on-focus="searchFocus(2)"
+                  @on-blur="searchFocus(-2)"
+                />
+              </div>
+              <div
+                class="searchs"
+                :class="{'suggest-show' :count>0}"
+                @mouseenter="searchFocus(1)"
+                @mouseleave="searchFocus(-1)"
+              >
+                <div v-if="searchResult.length>0">
+                  <div class="search-result">
+                    <div
+                      v-for="item in searchResult"
+                      :key="item.productId"
+                      class="search-item"
+                    >{{item.productName}}</div>
+                  </div>
+                </div>
+                <div v-if="searchText.length===0&&searchResult.length===0">
+                  <div class="search-history">
+                    <div class="flex history-text">
+                      <div>最近搜索</div>
+                      <div class="del-history" @click="delHistory">删除搜索历史</div>
+                    </div>
+
+                    <div class="history flex" v-if="searchHistorys.length>0">
+                      <div v-for="(item,index) in searchHistorys" :key="index">
+                        <div
+                          class="history-item flex"
+                          v-if="index<10"
+                          @click="addSearch(item)"
+                        >{{item}}</div>
+                      </div>
+                    </div>
+                    <div class="no-history" v-else>暂无搜索历史</div>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div class="list-item">全部商品</div>
             <div class="list-item">捐赠</div>
           </div>
-          <div>
-            <Divider type="vertical" />
-          </div>
-
+          <Divider type="vertical" />
           <div class="nav-aside flex">
             <NavAside></NavAside>
           </div>
@@ -23,23 +68,138 @@
 </template>
 
 <script>
+import util from "../../assets/js/util";
 import NavAside from "./NavAside";
 export default {
   data() {
-    return {};
+    return {
+      searchText: "",
+      searchResult: [],
+      searchHistorys: [],
+      count: 0
+    };
   },
   components: {
     NavAside
   },
   props: {},
-  methods: {},
-  mounted() {},
+  methods: {
+    // 输入款获取失去焦点   搜索框鼠标移入移出事件
+    searchFocus(num) {
+      this.count += num;
+    },
+    // 搜索
+    search() {
+      this.$api
+        .search(this.searchText)
+        .then(res => {
+          if (res.code === 200) {
+            this.searchResult = res.data;
+            if (res.data.length > 0) {
+              this.history();
+            }
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    // 存历史浏览
+    history() {
+      let searchHistory = [];
+      if (JSON.parse(localStorage.getItem("loginMsg"))) {
+        let loginMsg = JSON.parse(localStorage.getItem("loginMsg"));
+        if (localStorage.getItem(`${loginMsg.username}_search`)) {
+          searchHistory = JSON.parse(
+            localStorage.getItem(`${loginMsg.username}_search`)
+          );
+          if (!searchHistory.includes(this.searchText)) {
+            searchHistory.unshift(this.searchText);
+            localStorage.setItem(
+              `${loginMsg.username}_search`,
+              JSON.stringify(searchHistory)
+            );
+          }
+        } else {
+          searchHistory.unshift(this.searchText);
+          localStorage.setItem(
+            `${loginMsg.username}_search`,
+            JSON.stringify(searchHistory)
+          );
+        }
+      } else {
+        if (JSON.parse(localStorage.getItem("tourists"))) {
+          let tourists = JSON.parse(localStorage.getItem("tourists"));
+          if (!tourists.includes(this.searchText)) {
+            tourists.unshift(this.searchText);
+            this.searchHistorys.unshift(this.searchText);
+            localStorage.setItem("tourists", JSON.stringify(tourists));
+          }
+        } else {
+          let tourists = [];
+          tourists.push(this.searchText);
+          localStorage.setItem("tourists", JSON.stringify(tourists));
+        }
+      }
+    },
+    // 获取搜索历史
+    searchHistory() {
+      if (JSON.parse(localStorage.getItem("loginMsg"))) {
+        let loginMsg = JSON.parse(localStorage.getItem("loginMsg"));
+        if (localStorage.getItem(`${loginMsg.username}_search`)) {
+          this.searchHistorys = JSON.parse(
+            localStorage.getItem(`${loginMsg.username}_search`)
+          );
+        }
+      } else {
+        if (JSON.parse(localStorage.getItem("tourists"))) {
+          this.searchHistorys = JSON.parse(localStorage.getItem("tourists"));
+        }
+      }
+      console.log(this.searchHistorys);
+    },
+    // 删除搜索历史
+    delHistory() {
+      this.searchHistorys = [];
+      if (JSON.parse(localStorage.getItem("loginMsg"))) {
+        let loginMsg = JSON.parse(localStorage.getItem("loginMsg"));
+        localStorage.setItem(
+          `${loginMsg.username}_search`,
+          JSON.stringify(this.searchHistorys)
+        );
+      } else {
+        localStorage.setItem("tourists", JSON.stringify(this.searchHistorys));
+      }
+    },
+    // 添加搜索
+    addSearch(item) {
+      this.searchText = item;
+    }
+  },
+  beforeMount() {
+    this.searchHistory();
+  },
+  mounted() {
+    this.$watch(
+      "searchText",
+      util.throttle(() => {
+        if (this.searchText.trim() === "") {
+          this.searchResult = [];
+        } else {
+          this.search();
+        }
+      }, 450)
+    );
+  },
   watch: {},
   computed: {}
 };
 </script>
 
 <style scoped lang='scss'>
+/deep/ .ivu-input-wrapper {
+  width: 305px;
+}
 /deep/ .ivu-divider {
   background: #635f5f;
 }
@@ -60,16 +220,16 @@ export default {
     text-indent: -9999px;
     background-position: 0 0;
     cursor: pointer;
-    .right-box {
-      justify-content: flex-start;
-      .nav-list {
-        align-items: center;
-        margin-right: 22px;
-      }
-      .nav-aside {
-        transform: translate3d(0, 59px, 0);
-        transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
-      }
+  }
+  .right-box {
+    justify-content: flex-start;
+    .nav-list {
+      align-items: center;
+      margin-right: 22px;
+    }
+    .nav-aside {
+      // transform: translate3d(0, 59px, 0);
+      // transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
     }
   }
 }
@@ -100,5 +260,62 @@ export default {
   padding: 0 25px;
   cursor: pointer;
   transition: all 0.15s ease-out;
+}
+.suggest-show {
+  display: block !important;
+}
+.searchs {
+  display: none;
+  position: absolute;
+  // bottom: 0;
+  width: 100%;
+  overflow: hidden;
+  // border: 1px solid #e5e5e5;
+  background: #fff;
+  z-index: 999;
+  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 0 0 4px 4px;
+  color: #999;
+  font-size: 12px;
+  top: 40px;
+}
+.del-history:hover {
+  cursor: pointer;
+}
+.history {
+  display: flex;
+  justify-content: flex-start;
+  margin-left: 10px;
+  color: rgb(80, 79, 79);
+}
+.no-history {
+  margin-left: 10px;
+  color: rgb(80, 79, 79);
+}
+.history-item {
+  padding: 0 5px;
+}
+.history-item:hover {
+  color: rgb(236, 141, 17);
+  cursor: pointer;
+}
+.searchsss {
+  position: relative;
+
+  .search-result {
+    .search-item {
+      padding-left: 5px;
+      width: 100%;
+      height: 26px;
+      line-height: 26px;
+      color: #999;
+      padding: 0 10px;
+    }
+    .search-item:hover {
+      color: rgb(236, 141, 17);
+      background: rgb(226, 219, 219);
+      cursor: pointer;
+    }
+  }
 }
 </style>

@@ -26,7 +26,7 @@
             />
           </FormItem>
           <FormItem>
-            <!-- <Code></Code> -->
+            <Code></Code>
           </FormItem>
           <FormItem prop="single">
             <div class="pr flex">
@@ -134,17 +134,42 @@ export default {
   },
   props: {},
   methods: {
+    // 登录按钮
     login() {
       this.$router.push("/login");
     },
+    // 确认注册
     handleSubmit(name, num) {
       this.$refs[name].validate(valid => {
         if (valid) {
-          this.$Message.success("Success!");
+          this.register()
         } else {
           this.$Message.error("Fail!");
         }
       });
+    },
+    // 接口验证
+    register(){
+       let userMsg = {
+        username: this.formCustom.username,
+        password: this.formCustom.password,
+      };
+       this.$api
+        .register(userMsg)
+        .then(res => {
+          if (res.code === 200) {
+            this.$router.push("/login");
+            this.$Message.success("恭喜你，注册成功！");
+          } else if (res.code === 500) {
+            this.$Message.warning(res.msg);
+          } else {
+            this.$Message.error("注册失败");
+          }
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   },
   mounted() {},

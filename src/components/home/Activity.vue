@@ -1,7 +1,12 @@
 <template>
   <div>
     <div class="box flex">
-      <div v-for="(item,index) in activity" :key="index" class="content">
+      <div
+        v-for="(item,index) in activity"
+        :key="index"
+        class="content"
+        @click="goodsDetails(item.productId)"
+      >
         <div class="img">
           <img :src="item.productImageBig" />
         </div>
@@ -22,7 +27,17 @@ export default {
       default: () => []
     }
   },
-  methods: {},
+  methods: {
+    // 跳转到详情页
+    goodsDetails(productId) {
+      const { href } = this.$router.resolve({
+        name: "goodsDetails",
+        query: { productId: productId }
+      });
+      window.open(href, "_blank");
+      // window.open(`/goodsDetails?productId=${productId}`, "_blank");
+    }
+  },
   mounted() {},
   watch: {},
   computed: {}

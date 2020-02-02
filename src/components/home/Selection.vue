@@ -3,7 +3,12 @@
     <div class="content">
       <Titles>{{name}}</Titles>
       <div class="select flex">
-        <div v-for="(item,index) in selectData" :key="index" class="select-item">
+        <div
+          v-for="(item,index) in selectData"
+          :key="index"
+          class="select-item"
+          @click="goodsDetails(item.productId)"
+        >
           <div v-if="index===0">
             <img :src="item.productImageBig" :alt="item.subTitle" />
           </div>
@@ -37,7 +42,17 @@ export default {
       default: ""
     }
   },
-  methods: {},
+  methods: {
+    // 跳转到详情页
+    goodsDetails(productId) {
+      const { href } = this.$router.resolve({
+        name: "goodsDetails",
+        query: { productId: productId }
+      });
+      window.open(href, "_blank");
+      // window.open(`/goodsDetails?productId=${productId}`, "_blank");
+    }
+  },
   mounted() {},
   watch: {},
   computed: {}

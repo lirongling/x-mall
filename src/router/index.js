@@ -20,6 +20,22 @@ const routes = [{
             meta: {
                 title: '首页'
             }
+        }, {
+            path: '/goodsDetails',
+            name: "goodsDetails",
+            component: () =>
+                import ( /* webpackChunkName: "about" */ '../views/goodsDetails/GoodsDetails.vue'),
+            meta: {
+                title: '商品详情'
+            }
+        }, {
+            path: '/goods',
+            name: "goods",
+            component: () =>
+                import ( /* webpackChunkName: "about" */ '../views/goods/Goods.vue'),
+            meta: {
+                title: '商品'
+            }
         }],
     },
     {
@@ -72,7 +88,16 @@ router.beforeEach((to, from, next) => {
         //     let a=to.query._id
         //     a ? next():next('/published')
         // }
+        // console.log(from.path)
+        // console.log(to.path === from.path)
+        // if (!(from.path == '/login' && to.path === from.path)) {
+
+    // } else {
+    //     next(false)
+    // }
+
     next()
+
 
 })
 

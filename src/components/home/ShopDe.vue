@@ -4,7 +4,7 @@
       <div class="good-img flex">
         <img :src="ShopDe.productImageBig" :alt="ShopDe.productName" />
       </div>
-      <div class="good-title">{{ShopDe.productName}}</div>
+      <div class="good-title ellipsis">{{ShopDe.productName}}</div>
       <div class="sub-title ellipsis">{{ShopDe.subTitle}}</div>
       <div class="good-price">
         <div class="bt flex">
@@ -56,6 +56,7 @@ export default {
   transition: all 0.5s;
   padding: 25px 0;
   margin: 0 auto;
+  // height: 445px;
   .good-img {
     img {
       margin: 50px auto 10px;
@@ -63,6 +64,7 @@ export default {
     }
   }
   .good-title {
+    width: 100%;
     line-height: 1.2;
     font-size: 16px;
     color: #424242;

@@ -4,16 +4,13 @@
     <div class="nav-sub" id="boxFixed" :class="{'is_fixed' : isFixed}">
       <div class="nav-sub-wrapper flex">
         <ul class="nav-list flex">
-          <li class="nav-item home">首页</li>
-          <li class="nav-item">全部</li>
-          <li class="nav-item">周边品牌</li>
-          <li class="nav-item">捐赠名单</li>
-          <li class="nav-item">后台管理系统</li>
-          <li class="nav-item">XPay支付系统</li>
-          <li class="nav-item">XBoot开发平台</li>
-          <li class="nav-item">宣传视频</li>
-          <li class="nav-item">Github</li>
-          <li class="nav-item">商用授权</li>
+          <li
+            class="nav-item"
+            :class="{'home': num === index}"
+            v-for="(item,index) in navList"
+            @click="changeNav(index)"
+            :key="index"
+          >{{item}}</li>
         </ul>
         <div id="nav-show" class="nav-aside flex" v-show="isFixed" :class="{'show-nav' : isFixed}">
           <NavAside></NavAside>
@@ -29,7 +26,20 @@ export default {
   data() {
     return {
       isFixed: false,
-      offsetTop: 0
+      offsetTop: 0,
+      navList: [
+        "首页",
+        "全部",
+        "周边品牌",
+        "捐赠名单",
+        "后台管理系统",
+        "XPay支付系统",
+        "XBoot开发平台",
+        "宣传视频",
+        "Github",
+        "商用授权"
+      ],
+      num: 0
     };
   },
   components: {
@@ -46,6 +56,14 @@ export default {
       //如果被卷曲的高度大于吸顶元素到顶端位置 的距离
 
       this.isFixed = scrollTop >= this.offsetTop ? true : false;
+    },
+    changeNav(index) {
+      this.num = index;
+      if (index === 0) {
+        this.$router.push("/");
+      } else if (index === 1) {
+        this.$router.push("/goods");
+      }
     }
   },
   mounted() {
