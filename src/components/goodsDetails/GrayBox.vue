@@ -34,11 +34,21 @@
           <BuyNum @edit-num="editNum" :limit="Number(goodDetails.limitNum)"></BuyNum>
         </div>
         <div class="buy flex">
-          <div class="now-buy">
-            <Button type="primary">加入购物车</Button>
+          <AddCar
+            :productId="this.goodDetails.productId"
+            :productImageBig="this.goodDetails.productImageBig"
+            :source="'details'"
+          ></AddCar>
+          <!-- <div class="now-buy">
+            <Button
+              type="primary"
+              @click="addCart(goodDetails.productId,goodDetails.productImageBig)"
+            >加入购物车</Button>
+            <div id="add-img" ref="addcart" v-if="showMoveImg">
+              <img :src="goodDetails.productImageBig" alt />
+            </div>
           </div>
-
-          <Button>现在购买</Button>
+          <Button>现在购买</Button>-->
         </div>
       </div>
     </div>
@@ -47,15 +57,18 @@
 
 <script>
 import BuyNum from "./BuyNum";
+import AddCar from "../../components/common/AddCar";
 export default {
   data() {
     return {
       num: 0,
-      productNum: 1
+      productNum: 1,
+      showMoveImg: false
     };
   },
   components: {
-    BuyNum
+    BuyNum,
+    AddCar
   },
   props: {
     goodDetails: {
@@ -70,6 +83,58 @@ export default {
     },
     editNum(num) {
       this.productNum = num;
+    },
+    // 商品动画
+    moveImg() {
+      // 获取节点位置;
+      this.$nextTick(() => {
+        //获取对象相对于版面或由 offsetTop 属性指定的父坐标的计算顶端位置
+        let dom = this.$refs.addcart;
+        let elLeft = dom.getBoundingClientRect().left / 2 + dom.offsetWidth / 2;
+        let elTop = dom.getBoundingClientRect().top + dom.offsetHeight / 2;
+        console.log(elTop);
+        console.log(elLeft);
+        dom.style.zIndex = "999";
+        dom.style.transition = "all .6s ease-out";
+        // dom.style.marginTop = "-240px";
+        dom.style.transform = `translate(${elLeft + 20}px,${-elTop +
+          40}px) scale(0.1)`;
+        // 动画结束后触发
+        dom.addEventListener("transitionend", () => {
+          this.showMoveImg = false;
+          // this.domInt(ulStyle);
+          // this.flag = true;
+        });
+        dom.addEventListener("webkitAnimationEnd", () => {
+          this.showMoveImg = false;
+          // this.domInt(ulStyle);
+          // this.flag = true;
+        });
+        // dom.style.transform = "scale(0.1)";
+
+        // dom.style.transform = `translateX(${-elLeft}px)`;
+      });
+    },
+    // 加入购物车
+    addCart(productId, event) {
+      this.$api
+        .addCart({ productId })
+        .then(res => {
+          if (res.code === 200) {
+            this.showMoveImg = true;
+            this.moveImg();
+            // 加入购物车动画
+            // var dom = event.target;
+            // // console.log(event);
+            // // 获取点击的坐标
+            // let elLeft = dom.getBoundingClientRect().left + dom.offsetWidth / 2;
+            // let elTop = dom.getBoundingClientRect().top + dom.offsetHeight / 2;
+          }
+          // console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   },
   mounted() {},
@@ -182,6 +247,17 @@ export default {
       justify-content: flex-start;
       .now-buy {
         margin-right: 30px;
+        position: relative;
+        #add-img {
+          // transition: all 0.5s ease-out;
+          position: absolute;
+          z-index: 999;
+          top: 0;
+          right: 0;
+          img {
+            width: 40px;
+          }
+        }
       }
       /deep/ .ivu-btn {
         width: 145px;

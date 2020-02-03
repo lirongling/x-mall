@@ -24,7 +24,7 @@ export default {
 .title {
   padding-left: 30px;
   position: relative;
-  z-index: 10;
+  // z-index: 6;
   height: 60px;
   padding: 0 10px 0 24px;
   border-bottom: 1px solid #d4d4d4;

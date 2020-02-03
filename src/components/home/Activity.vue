@@ -69,7 +69,7 @@ export default {
     }
   }
   .content:hover {
-    z-index: 99;
+    z-index: 8;
     cursor: pointer;
     box-shadow: 0 3px 8px 6px rgba(0, 0, 0, 0.1);
     transition: all 0.5s ease;

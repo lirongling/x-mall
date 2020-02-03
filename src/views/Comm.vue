@@ -5,7 +5,8 @@
       <NavSub></NavSub>
     </div>
     <div class="container">
-      <router-view></router-view>
+          <router-view :key="key"></router-view>
+
     </div>
     <Footer></Footer>
   </div>
@@ -28,7 +29,13 @@ export default {
   methods: {},
   mounted() {},
   watch: {},
-  computed: {}
+  computed: {
+     key() {
+      return this.$route.name
+        ? this.$route.name + +new Date()
+        : this.$route + +new Date();
+    }
+  }
 };
 </script>
 

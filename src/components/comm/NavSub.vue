@@ -63,6 +63,11 @@ export default {
         this.$router.push("/");
       } else if (index === 1) {
         this.$router.push("/goods");
+      } else if (index === 2) {
+        this.$router.push({
+          name: "goods",
+          query: { _id: "5e26b94b099acc01b089efe" }
+        });
       }
     }
   },
@@ -109,11 +114,11 @@ to {
 .is_fixed {
   position: fixed !important;
   top: 0;
-  z-index: 999 !important;
+  z-index: 9 !important;
 }
 .nav-sub {
   position: relative;
-  z-index: 20;
+  z-index: 9;
   height: 90px;
   width: 100%;
   background: #f7f7f7;
@@ -173,7 +178,7 @@ to {
   position: relative;
   margin-left: 21px;
   width: 61px;
-  z-index: 99;
+  z-index: 9;
   height: 19px;
 }
 .cart-img {

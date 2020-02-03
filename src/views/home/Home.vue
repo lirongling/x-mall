@@ -40,7 +40,7 @@ export default {
       this.$api
         .home()
         .then(res => {
-          console.log(res);
+          // console.log(res);
           if (res.code === 200) {
             this.homeList = res.data;
           }

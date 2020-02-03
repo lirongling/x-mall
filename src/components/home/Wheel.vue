@@ -59,7 +59,7 @@ export default {
     }
   },
   mounted() {
-    console.log(this.panelContents);
+    // console.log(this.panelContents);
   },
   watch: {},
   computed: {}

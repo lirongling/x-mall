@@ -156,7 +156,7 @@ export default {
           this.searchHistorys = JSON.parse(localStorage.getItem("tourists"));
         }
       }
-      console.log(this.searchHistorys);
+      // console.log(this.searchHistorys);
     },
     // 删除搜索历史
     delHistory() {
@@ -272,7 +272,7 @@ export default {
   overflow: hidden;
   // border: 1px solid #e5e5e5;
   background: #fff;
-  z-index: 999;
+  z-index: 19;
   box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
   border-radius: 0 0 4px 4px;
   color: #999;

@@ -8,7 +8,7 @@ export default {
     },
     // 为你推荐
     recommend() {
-        return service.get('/goods/recommend')
+        return service.get("/goods/recommend")
     },
     // 所有商品
     // 1. page: 请求页数(必填)
@@ -36,10 +36,20 @@ export default {
         })
     },
     login({ username, password }) {
-        return service.post('/users/login ', {
+        return service.post('/users/login', {
             username,
             password,
         })
+    },
+    // 加入购物车
+    addCart({ productId }) {
+        return service.post('/goods/addCart', {
+            productId
+        })
+    },
+    // 查询购物车
+    getCarts() {
+        return service.get('/goods/getCart')
     },
 
 
@@ -67,9 +77,9 @@ export default {
      * search               搜索 参数： value：搜索关键词
      * keeplogin            保持登录
      */
-    recommend() {
-        return service.get('/recommend')
-    },
+    // recommend() {
+    //     return service.get('/recommend')
+    // },
 
     // ===============================================================================================================
     /**

@@ -109,7 +109,7 @@ export default {
   input {
     //  去除获取焦点的边框
     outline: none;
-    z-index: 10;
+    z-index: 6;
     width: 36px;
     height: 18px;
     background-color: #fff;

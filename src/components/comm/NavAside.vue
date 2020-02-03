@@ -37,13 +37,20 @@
           </div>
         </Poptip>
       </div>
-      <Poptip trigger="hover" placement="bottom-end" width="360">
+      <Poptip trigger="hover" placement="bottom-end" width="360" v-model="$store.state.carVisible">
         <div class="shop flex">
           <div class="cart-img"></div>
-          <div class="cart-num">0</div>
+          <div
+            ref="cartnum"
+            class="cart-num"
+            :class="{'cart-nums': $store.state.carNumber>0}"
+          >{{this.$store.state.carNumber}}</div>
         </div>
         <div class="api slot-content flex" slot="content">
-          <div class="cart-con flex">
+          <div v-if="$store.state.carNumber>0">
+            <CarList></CarList>
+          </div>
+          <div class="cart-con flex" v-else>
             <img src="../../assets/images/cart-empty-new.png" alt />
             <p>您的购物车竟然是空的!</p>
           </div>
@@ -54,11 +61,16 @@
 </template>
 
 <script>
+import CarList from "./CarList";
 export default {
   data() {
-    return {};
+    return {
+      carVisible: false
+    };
   },
-  components: {},
+  components: {
+    CarList
+  },
   props: {},
   methods: {
     // 登录按钮
@@ -69,11 +81,33 @@ export default {
     excit() {
       localStorage.removeItem("loginMsg");
       this.$store.state.userInfo = null;
+    },
+    // 购物车数量动画
+    numberScale() {
+      let dom = this.$refs.cartnum;
+      dom.style.transition = "all .5s ease";
+      // dom.style.marginTop = "-240px";
+      dom.style.transform = `scale(1.3)`;
+      // 动画结束后触发
+      dom.addEventListener("transitionend", () => {
+        dom.style.transform = `scale(1)`;
+      });
+      dom.addEventListener("webkitAnimationEnd", () => {
+        dom.style.transform = `scale(1)`;
+      });
     }
   },
   beforeMount() {},
   mounted() {},
-  watch: {},
+  watch: {
+    "$store.state.carNumber"(val) {
+      if (val > 0) {
+        setTimeout(() => {
+          this.numberScale();
+        }, 500);
+      }
+    }
+  },
   computed: {}
 };
 </script>
@@ -150,7 +184,8 @@ export default {
   }
 }
 .slot-content {
-  height: 360px;
+  background: #fff;
+  // height: 360px;
   justify-content: center;
   .cart-con {
     height: 313px;
@@ -162,6 +197,10 @@ export default {
       margin-bottom: 30px;
     }
   }
+}
+.cart-nums {
+  background: #eb746b !important;
+  background-image: linear-gradient(#eb746b, #e25147);
 }
 .cart-num {
   position: absolute;
@@ -187,7 +226,7 @@ export default {
   position: relative;
   margin-left: 21px;
   width: 61px;
-  z-index: 99;
+  z-index: 9;
   height: 19px;
 }
 .cart-img {

@@ -12,6 +12,7 @@ import 'view-design/dist/styles/iview.css';
 import service from "../src/http"
 import dayjs from 'dayjs'
 import './assets/js/excitLogin.js'
+import Router from 'vue-router'
 
 
 // Vue.use(ElementUI)
@@ -29,3 +30,7 @@ new Vue({
     store,
     render: h => h(App)
 }).$mount('#app')
+const routerPush = Router.prototype.push
+Router.prototype.push = function push(location) {
+  return routerPush.call(this, location).catch(error=> error)
+}

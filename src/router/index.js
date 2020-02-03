@@ -39,6 +39,19 @@ const routes = [{
         }],
     },
     {
+        path: "/goods",
+        component: Comm,
+        children: [ {
+            path: '/',
+            name: "goods",
+            component: () =>
+                import ( /* webpackChunkName: "about" */ '../views/goods/Goods.vue'),
+            meta: {
+                title: '商品'
+            }
+        }],
+    },
+    {
         path: "/",
         component: () =>
             import ( /* webpackChunkName: "about" */ '../views/LoginComm'),

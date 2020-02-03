@@ -8,8 +8,11 @@
       <div class="sub-title ellipsis">{{ShopDe.subTitle}}</div>
       <div class="good-price">
         <div class="bt flex">
-          <Button class="bt-de">查看详情</Button>
-          <Button type="info">加入购物车</Button>
+          <AddCar
+            :productId="this.ShopDe.productId"
+            :productImageBig="this.ShopDe.productImageBig"
+            :source="''"
+          ></AddCar>
         </div>
         <div class="price-number">
           <span class="price-">￥</span>
@@ -21,11 +24,14 @@
 </template>
 
 <script>
+import AddCar from "../../components/common/AddCar";
 export default {
   data() {
     return {};
   },
-  components: {},
+  components: {
+    AddCar
+  },
   props: {
     ShopDe: {
       type: Object,

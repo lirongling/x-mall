@@ -18,13 +18,30 @@ export default {
   data() {
     return {};
   },
-  methods: {},
+  methods: {
+    // 查询购物车
+    getCarts() {
+      this.$api
+        .getCarts()
+        .then(res => {
+          console.log(res);
+          this.$store.state.carNumber = 0;
+          if (res.code === 200) {
+            this.$store.state.carList = res.data;
+            res.data.map(item => {
+              this.$store.state.carNumber += item.count;
+            });
+          }
+        })
+        .catch(err => {});
+    }
+  },
   beforeMount() {
     if (this.$route.name !== "login") {
       localStorage.removeItem("login");
     }
-
     if (JSON.parse(localStorage.getItem("loginMsg"))) {
+      this.getCarts();
       this.$store.state.userInfo = JSON.parse(localStorage.getItem("loginMsg"));
     }
     // this.$store.state.city = JSON.parse(localStorage.getItem("city"));
