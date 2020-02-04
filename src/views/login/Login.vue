@@ -19,7 +19,7 @@
             />
           </FormItem>
           <FormItem>
-            <Code></Code>
+            <Code @is-codes="isCodes" ref="mychild" v-if="hackReset"></Code>
           </FormItem>
           <FormItem prop="single">
             <div class="pr flex">
@@ -94,10 +94,12 @@ export default {
     };
 
     return {
+      hackReset: true,
       labelWith: 0,
       userCode: false,
       passCode: false,
       passsCode: false,
+      isCode: false,
       formCustom: {
         username: "",
         password: "",
@@ -129,31 +131,51 @@ export default {
         }
       });
     },
+    isCodes(flage) {
+      // console.log(flage);
+      this.isCode = flage;
+    },
+    //需要重新渲染时调用aaa
+    refresh() {
+      this.hackReset = false;
+      this.$nextTick(() => {
+        this.hackReset = true;
+      });
+    },
     // 请求接口验证
     login() {
-      let userMsg = {
-        username: this.formCustom.username,
-        password: this.formCustom.password
-      };
-      this.$api
-        .login(userMsg)
-        .then(res => {
-          if (res.code === 200) {
-            this.$router.push("/");
-            this.$Message.success("恭喜你，登录成功！");
-            localStorage.setItem("loginMsg", JSON.stringify(userMsg));
-            localStorage.setItem("lastTime", new Date().getTime());
-            this.$store.state.userInfo = userMsg;
-          } else if (res.code === 500) {
-            this.$Message.warning(res.msg);
-          } else {
-            this.$Message.error("未知错误");
-          }
-          console.log(res);
-        })
-        .catch(err => {
-          console.log(err);
-        });
+      if (!this.isCode) {
+        this.$Message.warning("请完成验证");
+      } else {
+        let userMsg = {
+          username: this.formCustom.username,
+          password: this.formCustom.password
+        };
+        this.$api
+          .login(userMsg)
+          .then(res => {
+            this.$store.state.refresh = 0;
+            if (res.code === 200) {
+              this.$router.push("/");
+              this.$Message.success("恭喜你，登录成功！");
+              localStorage.setItem("loginMsg", JSON.stringify(userMsg));
+              localStorage.setItem("lastTime", new Date().getTime());
+              this.$store.state.userInfo = userMsg;
+            } else if (res.code === 500) {
+              this.refresh();
+              this.$Message.warning(res.msg);
+
+              // this.$refs.mychild.refresh();
+            } else {
+              this.refresh();
+              this.$Message.error("未知错误");
+            }
+            console.log(res);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
     },
     // 返回按钮
     back() {

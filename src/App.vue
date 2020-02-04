@@ -29,6 +29,7 @@ export default {
           if (res.code === 200) {
             this.$store.state.carList = res.data;
             res.data.map(item => {
+              item.isChecked = false;
               this.$store.state.carNumber += item.count;
             });
           }

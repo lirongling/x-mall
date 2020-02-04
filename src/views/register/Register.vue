@@ -26,7 +26,7 @@
             />
           </FormItem>
           <FormItem>
-            <Code></Code>
+            <Code @is-codes="isCodes" ref="mychild" v-if="hackReset"></Code>
           </FormItem>
           <FormItem prop="single">
             <div class="pr flex">
@@ -109,11 +109,13 @@ export default {
       }
     };
     return {
+      hackReset: true,
       labelWith: 0,
       userCode: false,
       passCode: false,
       passsCode: false,
       singleCode: false,
+      isCode: false,
       formCustom: {
         username: "",
         password: "",
@@ -134,6 +136,17 @@ export default {
   },
   props: {},
   methods: {
+    isCodes(flage) {
+      // console.log(flage);
+      this.isCode = flage;
+    },
+    //需要重新渲染时调用aaa
+    refresh() {
+      this.hackReset = false;
+      this.$nextTick(() => {
+        this.hackReset = true;
+      });
+    },
     // 登录按钮
     login() {
       this.$router.push("/login");
@@ -142,34 +155,40 @@ export default {
     handleSubmit(name, num) {
       this.$refs[name].validate(valid => {
         if (valid) {
-          this.register()
+          this.register();
         } else {
           this.$Message.error("Fail!");
         }
       });
     },
     // 接口验证
-    register(){
-       let userMsg = {
-        username: this.formCustom.username,
-        password: this.formCustom.password,
-      };
-       this.$api
-        .register(userMsg)
-        .then(res => {
-          if (res.code === 200) {
-            this.$router.push("/login");
-            this.$Message.success("恭喜你，注册成功！");
-          } else if (res.code === 500) {
-            this.$Message.warning(res.msg);
-          } else {
-            this.$Message.error("注册失败");
-          }
-          console.log(res);
-        })
-        .catch(err => {
-          console.log(err);
-        });
+    register() {
+      if (!this.isCode) {
+        this.$Message.warning("请完成验证");
+      } else {
+        let userMsg = {
+          username: this.formCustom.username,
+          password: this.formCustom.password
+        };
+        this.$api
+          .register(userMsg)
+          .then(res => {
+            if (res.code === 200) {
+              this.$router.push("/login");
+              this.$Message.success("恭喜你，注册成功！");
+            } else if (res.code === 500) {
+              this.$Message.warning(res.msg);
+              this.refresh();
+            } else {
+              this.$Message.error("注册失败");
+              this.refresh();
+            }
+            console.log(res);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
     }
   },
   mounted() {},

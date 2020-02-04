@@ -1,85 +1,109 @@
 <template>
- 
- <div ref="vaptcha" style="width: 300pxheight: 36px">
-      <div class="vaptcha-init-main">
-        <div class="vaptcha-init-loading">
-              <a href="/" target="_blank">
-                <img src="https://r.vaptcha.com/
+  <div ref="vaptcha" style="width: 300pxheight: 36px">
+    <div class="vaptcha-init-main">
+      <div class="vaptcha-init-loading">
+        <a href="/" target="_blank">
+          <img src="https://r.vaptcha.com/
 public/img/vaptcha-loading.gif" />
-            </a>
-          <span class="vaptcha-text">VAPTCHA启动中...</span>
-        </div>
+        </a>
+        <span class="vaptcha-text">VAPTCHA启动中...</span>
       </div>
     </div>
+  </div>
 </template>
 
 <script>
 const extend = function(to, _from) {
   for (const key in _from) {
-    to[key] = _from[key]
+    to[key] = _from[key];
   }
-  return to
-}
+  return to;
+};
 
 export default {
   data() {
     return {};
   },
   components: {},
-   props: {
+  props: {
     type: {
       type: String,
-      default: 'click'
+      default: "embed"
     },
     scene: {
       type: String,
-      default: ''
+      default: ""
     },
     vpStyle: {
       type: String,
-      default: 'dark'
+      default: "dark"
     },
     color: {
       type: String,
-      color: '#3C8AFF'
+      color: "#3C8AFF"
     },
     lang: {
       type: String,
-      default: 'zh-CN'
-    },
+      default: "zh-CN"
+    }
   },
   methods: {
     loadV2Script() {
-      if (typeof window.vaptcha === 'function') { //如果已经加载就直接放回
-        return Promise.resolve()
+      // console.log("object");
+      if (typeof window.vaptcha === "function") {
+        //如果已经加载就直接放回
+        return Promise.resolve();
       } else {
         return new Promise(resolve => {
-          var script = document.createElement('script')
-            script.src = 'https://cdn.vaptcha.com/v2.js'
-            script.async = true
-            script.onload = script.onreadystatechange = function() {
-              if (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete') {
-                resolve()
-                script.onload = script.onreadystatechange = null
-              }
+          var script = document.createElement("script");
+          script.src = "https://cdn.vaptcha.com/v2.js";
+          script.async = true;
+          script.onload = script.onreadystatechange = function() {
+            if (
+              !this.readyState ||
+              this.readyState == "loaded" ||
+              this.readyState == "complete"
+            ) {
+              resolve();
+              script.onload = script.onreadystatechange = null;
             }
-            document.getElementsByTagName("head")[0].appendChild(script)
-        })
+          };
+          document.getElementsByTagName("head")[0].appendChild(script);
+        });
       }
     }
-  
   },
   mounted() {
-  this.loadV2Script().then(() => {
-    window.vaptcha({
-    vid: '5e3405df76cb1970819ea980',
-    container: this.$refs.vaptcha,
-    // offline_server:'',
-  }).then(obj => {
-      this.$emit('input', obj)
-      obj.render() //渲染按钮 
-    })
-  })
+    let _this = this;
+    _this.$emit("is-codes", false);
+    this.loadV2Script().then(() => {
+      vaptcha({
+        vid: "5e39100676cb1970819eab7a",
+        container: this.$refs.vaptcha,
+        offline_server: "/offline"
+      }).then(vaptchaObj => {
+        vaptchaObj.render(); //渲染按钮
+
+        //获取token的方式二：
+        vaptchaObj.listen("pass", function($) {
+          // 验证成功进行后续操作
+          _this.$emit("is-codes", true);
+
+          var data = {
+            //表单数据
+            token: vaptchaObj.getToken()
+          };
+          // console.log(this.$);
+          // $.post("login", data, function(r) {
+          //   console.log("object");
+          //   if (r.code !== 200) {
+          //     console.log("登录失败");
+          //     vaptchaObj.reset(); //重置验证码
+          //   }
+          // });
+        });
+      });
+    });
   },
   watch: {},
   computed: {}
@@ -91,29 +115,29 @@ export default {
   display: table;
   width: 100%;
   height: 100%;
-  background-color: #EEEEEE;
+  background-color: #eeeeee;
 }
 
 .vaptcha-init-loading {
   display: table-cell;
   vertical-align: middle;
-  text-align: center
+  text-align: center;
 }
 
-.vaptcha-init-loading>a {
+.vaptcha-init-loading > a {
   display: inline-block;
   width: 18px;
   height: 18px;
 }
 
-.vaptcha-init-loading>a img {
-  vertical-align: middle
+.vaptcha-init-loading > a img {
+  vertical-align: middle;
 }
 
 .vaptcha-init-loading .vaptcha-text {
   font-family: sans-serif;
   font-size: 12px;
-  color: #CCCCCC;
-  vertical-align: middle
+  color: #cccccc;
+  vertical-align: middle;
 }
 </style>

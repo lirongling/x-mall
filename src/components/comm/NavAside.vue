@@ -47,7 +47,7 @@
           >{{this.$store.state.carNumber}}</div>
         </div>
         <div class="api slot-content flex" slot="content">
-          <div v-if="$store.state.carNumber>0">
+          <div v-if="$store.state.carNumber>0" class="cars">
             <CarList></CarList>
           </div>
           <div class="cart-con flex" v-else>
@@ -117,6 +117,10 @@ export default {
   display: flex;
   align-items: center;
 }
+/deep/ .ivu-poptip-body {
+  padding: 0 0;
+}
+
 /deep/ .ivu-poptip-popper {
   margin-top: 10px;
   transition: opacity 0.15s ease-out;
@@ -184,9 +188,12 @@ export default {
   }
 }
 .slot-content {
-  background: #fff;
+  // background: #fff;
+  width: 360px;
   // height: 360px;
   justify-content: center;
+  // background: #6b95ea;
+
   .cart-con {
     height: 313px;
     justify-content: center;

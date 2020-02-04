@@ -20,6 +20,10 @@ export default {
       type: [Number],
       default: 1
     },
+    index: {
+      type: [Number],
+      default: 1
+    },
     id: {
       type: [Number, String]
     },
@@ -80,7 +84,6 @@ export default {
         this.domInt(ulStyle);
         this.flag = true;
       });
-      this.$emit("edit-num", this.Num, this.id, this.checked);
     },
     domInt(domStyle) {
       domStyle.zIndex = "1";
@@ -91,7 +94,7 @@ export default {
   watch: {
     Num(val, oldVal) {
       if (Number(val) > 0 && this.Num <= this.limit) {
-        this.$emit("edit-num", this.Num, this.id, this.checked);
+        this.$emit("edit-num", this.Num, this.index, this.id, this.checked);
       } else {
         this.Num = oldVal;
       }

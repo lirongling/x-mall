@@ -51,6 +51,12 @@ export default {
     getCarts() {
         return service.get('/goods/getCart')
     },
+    // 删除购物车的商品
+    delCart({ productId }) {
+        return service.post('/goods/delCart', {
+            productId
+        })
+    },
 
 
     // 获取定位

@@ -82,6 +82,22 @@ export default {
         // dom.style.transform = `translateX(${-elLeft}px)`;
       });
     },
+    // 查询购物车
+    getCarts() {
+      this.$api
+        .getCarts()
+        .then(res => {
+          // console.log(res);
+          // this.$store.state.carNumber = 0;
+          if (res.code === 200) {
+            this.$store.state.carList = res.data;
+            // res.data.map(item => {
+            //   this.$store.state.carNumber += item.count;
+            // });
+          }
+        })
+        .catch(err => {});
+    },
     // 加入购物车
     addCart(productId, event) {
       this.$api
@@ -90,6 +106,7 @@ export default {
           if (res.code === 200) {
             this.showMoveImg = true;
             this.$store.state.carVisible = true;
+            this.getCarts();
             this.$store.state.carNumber++;
 
             console.log(res);

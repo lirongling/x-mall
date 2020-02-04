@@ -3,6 +3,8 @@ export default {
     showMoveImg: false,
     carVisible: false,
     carNumber: 0,
-    carList: []
+    carList: [],
+    vaptchaObj: null,
+    refresh: 0
 
 }

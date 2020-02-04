@@ -36,12 +36,20 @@ const routes = [{
             meta: {
                 title: '商品'
             }
+        }, {
+            path: '/cart',
+            name: "cart",
+            component: () =>
+                import ( /* webpackChunkName: "about" */ '../views/cart/Cart.vue'),
+            meta: {
+                title: '购物车'
+            }
         }],
     },
     {
         path: "/goods",
         component: Comm,
-        children: [ {
+        children: [{
             path: '/',
             name: "goods",
             component: () =>
