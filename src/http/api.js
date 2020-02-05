@@ -42,9 +42,10 @@ export default {
         })
     },
     // 加入购物车
-    addCart({ productId }) {
+    addCart({ productId, count }) {
         return service.post('/goods/addCart', {
-            productId
+            productId,
+            count
         })
     },
     // 查询购物车
@@ -55,6 +56,13 @@ export default {
     delCart({ productId }) {
         return service.post('/goods/delCart', {
             productId
+        })
+    },
+    // 修改购物车数量
+    editCart({ productId, count }) {
+        return service.post('/goods/editCart', {
+            productId,
+            count
         })
     },
 

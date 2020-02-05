@@ -38,6 +38,7 @@
             :productId="this.goodDetails.productId"
             :productImageBig="this.goodDetails.productImageBig"
             :source="'details'"
+            :count="productNum"
           ></AddCar>
           <!-- <div class="now-buy">
             <Button

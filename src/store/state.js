@@ -5,6 +5,7 @@ export default {
     carNumber: 0,
     carList: [],
     vaptchaObj: null,
-    refresh: 0
+    refresh: 0,
+    checkedout: [],
 
 }

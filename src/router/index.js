@@ -44,6 +44,14 @@ const routes = [{
             meta: {
                 title: '购物车'
             }
+        }, {
+            path: '/checkedout',
+            name: "checkedout",
+            component: () =>
+                import ( /* webpackChunkName: "about" */ '../views/checkedout/Checkedout.vue'),
+            meta: {
+                title: '结算'
+            }
         }],
     },
     {

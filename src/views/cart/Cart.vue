@@ -3,7 +3,7 @@
     <div class="gray-box">
       <Titles>购物清单</Titles>
 
-      <div class="ui-cart">
+      <div class="ui-cart" v-if="carList.length>0">
         <div class="cart-table-title flex">
           <div class="table-left flex">
             <div class="name title-item">商品信息</div>
@@ -15,74 +15,82 @@
             <div class="title-item">操作</div>
           </div>
         </div>
-        <div class="cart-table">
-          <div class="cart-items flex" v-for="(item,index) in carList" :key="index">
-            <div class="table-left flex">
-              <span class="is-check">{{isCheked}}</span>
-              <div
-                class="items-choose"
-                :class="{'checkbox-on' : item.isChecked }"
-                @click="checkss(item)"
-              ></div>
+        <div>
+          <div class="cart-table">
+            <div class="cart-items flex" v-for="(item,index) in carList" :key="index">
+              <div class="table-left flex">
+                <span class="is-check">{{isCheked}}</span>
+                <div
+                  class="items-choose"
+                  :class="{'checkbox-on' : item.isChecked }"
+                  @click="checkss(item)"
+                ></div>
 
-              <div class="items-thumb">
-                <img :src="item.productImageBig" :alt="item.productName" />
+                <div class="items-thumb">
+                  <img :src="item.productImageBig" :alt="item.productName" />
+                </div>
+                <div class="name ellipsis">{{item.productName}}</div>
               </div>
-              <div class="name ellipsis">{{item.productName}}</div>
+              <div class="table-right flex">
+                <div class="price1 title-item">￥ {{item.salePrice}}</div>
+                <div class="item-cols-num title-item">
+                  <BuyNum
+                    @edit-num="editNum"
+                    :num="item.count"
+                    :limit="Number(item.limitNum)"
+                    :index="index"
+                    :id="item._id"
+                  ></BuyNum>
+                </div>
+                <div class="subtotal title-item">¥ {{(item.count*item.salePrice).toFixed(2)}}</div>
+                <div class="operation title-item flex">
+                  <div class="del-btn del" @click="delOnly(item._id,index)">删除</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="fix-bottom flex">
+            <div class="table-left flex">
+              <div @click="checkedAll" class="flex">
+                <div class="items-choose" :class="{'checkbox-on' : checkAll }"></div>
+                <span class="choose-all">全选</span>
+              </div>
+              <div class="delete-choose-goods" @click="deletaAll">删除选中的商品</div>
             </div>
             <div class="table-right flex">
-              <div class="price1 title-item">￥ {{item.salePrice}}</div>
-              <div class="item-cols-num title-item">
-                <BuyNum
-                  @edit-num="editNum"
-                  :num="item.count"
-                  :limit="Number(item.limitNum)"
-                  :index="index"
-                ></BuyNum>
+              <div class="shipping flex">
+                <div class="shipping-total flex">
+                  <div class="highlight">
+                    已选择
+                    <span>{{allNumber()}}</span> 件商品
+                  </div>
+                  <div class="all-car">
+                    共计
+                    <span>{{allNum}}</span> 件商品
+                  </div>
+                </div>
+                <div class="shipping-total flex no-bordel">
+                  <div class="highlight">
+                    应付总额：
+                    <span>
+                      <span class="saless">￥</span>
+                      {{total().toFixed(2)}}
+                    </span>
+                  </div>
+                  <div class="all-car">应付总额不含运费</div>
+                </div>
               </div>
-              <div class="subtotal title-item">¥ {{item.count*item.salePrice}}</div>
-              <div class="operation title-item flex">
-                <div class="del-btn del" @click="delOnly(item._id,index)">删除</div>
+              <div class="buy flex">
+                <Button type="primary" :disabled="allNumber()===0" @click="checkedout">现在结算</Button>
               </div>
             </div>
           </div>
         </div>
-        <div class="fix-bottom flex">
-          <div class="table-left flex">
-            <div @click="checkedAll" class="flex">
-              <div class="items-choose" :class="{'checkbox-on' : checkAll }"></div>
-              <span class="choose-all">全选</span>
-            </div>
-            <div class="delete-choose-goods" @click="deletaAll">删除选中的商品</div>
-          </div>
-          <div class="table-right flex">
-            <div class="shipping flex">
-              <div class="shipping-total flex">
-                <div class="highlight">
-                  已选择
-                  <span>{{allNumber()}}</span> 件商品
-                </div>
-                <div class="all-car">
-                  共计
-                  <span>{{allNum}}</span> 件商品
-                </div>
-              </div>
-              <div class="shipping-total flex no-bordel">
-                <div class="highlight">
-                  应付总额：
-                  <span>
-                    <span class="saless">￥</span>
-                    {{total()}}
-                  </span>
-                </div>
-                <div class="all-car">应付总额不含运费</div>
-              </div>
-            </div>
-            <div class="buy flex">
-              <Button type="primary" :disabled="allNumber()===0">现在结算</Button>
-            </div>
-          </div>
-        </div>
+      </div>
+      <div v-else class="flex no-car">
+        <img src="../../assets/images/cart-empty_@2x.png" alt />
+        <p style="text-align: center; padding: 20px; color: rgb(141, 141, 141);">你的购物车空空如也</p>
+        <Button @click="junmDoods">现在选购</Button>
       </div>
     </div>
   </div>
@@ -105,8 +113,21 @@ export default {
   },
   props: {},
   methods: {
-    editNum(num, index) {
-      this.carList[index].count = num;
+    editNum(num, index, id) {
+      let a = { productId: id, count: num };
+      this.$api
+        .editCart(a)
+        .then(res => {
+          if (res.code === 200) {
+            this.carList[index].count = num;
+          } else {
+            // console.log("object");
+            this.Notice("添加失败");
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
       // this.productNum = num;
     },
     delOnly(productId, index) {
@@ -159,15 +180,15 @@ export default {
         }
       });
       if (delArr.length === 0) {
-        this.Notice();
+        this.Notice("还未选择商品");
       } else {
         this.confirm(delArr);
       }
     },
     // 提醒
-    Notice() {
+    Notice(title) {
       this.$Notice.warning({
-        title: "还未选中商品",
+        title: title,
         duration: 1.5
       });
     },
@@ -195,14 +216,25 @@ export default {
     },
     allNumber() {
       let num = 0;
-      this.carList.map(item => {
+      let checkedouts = [];
+      this.$store.state.carList.map(item => {
         if (item.isChecked) {
           // console.log(item.isChecked);
           num += item.count;
+          checkedouts.push(item);
         }
       });
+      this.$store.state.checkedout = checkedouts;
       this.total();
       return num;
+    },
+    // 选购商品
+    junmDoods() {
+      this.$router.push("/goods");
+    },
+    // 跳转到结算页面
+    checkedout() {
+      this.$router.push("/checkedout");
     }
   },
   mounted() {
@@ -218,6 +250,7 @@ export default {
       this.$store.state.carList.map(item => {
         totalPrice += item.count;
       });
+      this.$store.state.carNumber = totalPrice;
       return totalPrice;
     }
   }
@@ -266,7 +299,7 @@ export default {
       justify-content: flex-start;
     }
     .table-right {
-      width: 548px;
+      min-width: 548px;
       justify-content: flex-start;
     }
     .cart-table {
@@ -369,7 +402,7 @@ export default {
             color: #323232;
             font-weight: 400;
             font-size: 14px;
-            width: 150px;
+            min-width: 150px;
             text-align: right;
             span {
               color: #d44d44;
@@ -402,6 +435,17 @@ export default {
           height: 45px;
         }
       }
+    }
+  }
+  .no-car {
+    flex-direction: column;
+    padding: 50px;
+    img {
+      width: 275px;
+    }
+    /deep/ .ivu-btn {
+      width: 150px;
+      height: 40px;
     }
   }
 }

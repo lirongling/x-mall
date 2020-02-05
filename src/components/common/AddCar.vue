@@ -38,6 +38,7 @@ export default {
       type: Number,
       default: ""
     },
+
     productImageBig: {
       type: String,
       default: ""
@@ -45,6 +46,10 @@ export default {
     source: {
       type: String,
       default: ""
+    },
+    count: {
+      type: [Number, String],
+      default: 1
     }
   },
   methods: {
@@ -101,15 +106,16 @@ export default {
     // 加入购物车
     addCart(productId, event) {
       this.$api
-        .addCart({ productId })
+        .addCart({ productId: productId, count: this.count })
         .then(res => {
+          console.log(res);
           if (res.code === 200) {
             this.showMoveImg = true;
             this.$store.state.carVisible = true;
-            this.getCarts();
-            this.$store.state.carNumber++;
 
-            console.log(res);
+            // this.editNum(productId, this.count);
+            this.getCarts();
+            this.$store.state.carNumber += this.count;
             this.moveImg();
           }
           // console.log(res);
@@ -117,6 +123,24 @@ export default {
         .catch(err => {
           console.log(err);
         });
+    },
+    editNum(id, num) {
+      let a = { productId: this._id, count: num };
+      this.$api
+        .editCart(a)
+        .then(res => {
+          console.log(res);
+          if (res.code === 200) {
+            this.carList[index].count = num;
+          } else {
+            // console.log("object");
+            // this.Notice("添加失败");
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+      // this.productNum = num;
     }
   },
   mounted() {},

@@ -131,6 +131,7 @@ export default {
         }
       });
     },
+    // 事件分发
     isCodes(flage) {
       // console.log(flage);
       this.isCode = flage;
