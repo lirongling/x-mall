@@ -65,7 +65,41 @@ export default {
             count
         })
     },
-
+    // 添加收获地址
+    // 参数:
+    // 1.username: 用户名
+    // 2.phone: 电话
+    // 3.address: 地址
+    // 4.isDefault: 是否为默认地址
+    addAddress({ username, phone, address, isDefault, addressId }) {
+        return service.post('/address/addAddress', {
+            username,
+            phone,
+            address,
+            isDefault,
+            addressId,
+        })
+    },
+    // 获取全部收获地址
+    getAddress() {
+        return service.get('/address/list')
+    },
+    // 删除地址
+    deleteAddress({ addressId }) {
+        return service.post('/address/deleteAddress', {
+            addressId
+        })
+    },
+    // 修改地址
+    editAddress({ addressId, username, phone, address, isDefault }) {
+        return service.post('/address/editAddress', {
+            addressId,
+            username,
+            phone,
+            address,
+            isDefault
+        })
+    },
 
     // 获取定位
     position() {

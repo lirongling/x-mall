@@ -7,5 +7,7 @@ export default {
     vaptchaObj: null,
     refresh: 0,
     checkedout: [],
+    newAddress: {},
+    editAddress: {},
 
 }

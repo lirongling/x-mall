@@ -12,7 +12,7 @@
             :key="index"
           >{{item}}</li>
         </ul>
-        <div id="nav-show" class="nav-aside flex" v-show="isFixed" :class="{'show-nav' : isFixed}">
+        <div id="nav-show" class="nav-aside flex">
           <NavAside></NavAside>
         </div>
       </div>
@@ -85,13 +85,21 @@ export default {
 
   watch: {
     isFixed(val, oldVal) {
-      if (val !== oldVal && val) {
+      // console.log(val);
+      if (val) {
+        // document.getElementById("nav-show").style.transform = "translateY(0px)";
+
+        // console.log(val);
         document.getElementById("nav-show").style.transform = "translateY(0px)";
-        setInterval(() => {
-          // console.log(val);
-          document.getElementById("nav-show").style.transform =
-            "translateY(55px)";
-        }, 300);
+      } else if (!val) {
+        console.log("object");
+        // console.log(document.getElementById("nav-show").style.transform);
+        // document.getElementById("nav-show").style.transform =
+        //   "translateY(90px)";
+
+        // console.log(val);
+        document.getElementById("nav-show").style.transform =
+          "translateY(-95px)";
       }
     }
   },
@@ -100,16 +108,10 @@ export default {
 </script>
 
 <style scoped lang='scss'>
-.show-nav {
-  // top: 50%;
-  // transform: translateY(55px);
-}
-from {
-  transform: translate(-50);
-}
-to {
-  transform: translateY(0);
-}
+// .show-nav {
+//   // top: 50%;
+//   // transform: translateY(55px);
+// }
 
 .is_fixed {
   position: fixed !important;
@@ -154,7 +156,7 @@ to {
   width: 143px;
   position: absolute;
   right: 0;
-  top: -20px;
+  transform: translateY(-95px);
   transition: all 0.5s;
 
   // transform: translate3d(0, 59px, 0);

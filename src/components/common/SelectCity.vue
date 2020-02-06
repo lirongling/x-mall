@@ -10,13 +10,7 @@
         class="flex"
       >
         <FormItem prop="province" label="按省份选择:">
-          <Select
-            v-model="formValidate.province"
-            :label-in-value="true"
-            placeholder="省份"
-            @on-change="change"
-            filterable
-          >
+          <Select v-model="formValidate.province" placeholder="省份" filterable @on-select="change">
             >
             <Option v-for="(item, index) in provinceArr" :key="index" v-model="item.pk">{{ item.pv}}</Option>
           </Select>
@@ -27,6 +21,7 @@
             placeholder="城市"
             :disabled="cities.length===0"
             @on-select="selectCity"
+            filterable
           >
             >
             <Option v-for="(item,index) in cities" :key="index" v-model="item.ck">{{ item.cv}}</Option>
@@ -39,6 +34,7 @@
               placeholder="区县"
               :disabled="county.length===0"
               @on-select="selectCounty"
+              filterable
             >
               >
               <Option v-for="(item,index) in county" :key="index" v-model="item.cyk">{{ item.cyv}}</Option>
@@ -51,6 +47,7 @@
             placeholder="乡镇"
             :disabled="town.length===0"
             @on-select="selectTown"
+            filterable
           >
             >
             <Option v-for="(item,index) in town" :key="index" v-model="item.tk">{{ item.tv}}</Option>
@@ -69,11 +66,12 @@ export default {
     return {
       isMunicipality: false,
       provinceArr: window.proData_,
+      municipality: ["北京", "上海", "天津", "重庆"],
       cities: [],
       county: [],
       town: [],
       formValidate: {
-        province: "",
+        province: 1,
         city: "",
         county: "",
         town: ""
@@ -91,7 +89,6 @@ export default {
   props: {},
   methods: {
     change(val) {
-      console.log(val);
       this.pk = val.value;
       this.disabled = false;
       if (val.value < 5) {
@@ -106,6 +103,7 @@ export default {
         });
       }
       this.provinces = val.label;
+      this.formValidate.city = val.label[0].ck;
     },
     selectCity(val) {
       if (this.pk < 5) {
@@ -136,6 +134,7 @@ export default {
         });
       }
       this.countys = val.label;
+
       // this.$emit("edit-num", this.Num, this.index, this.id, this.checked);
     },
     selectTown(val) {
@@ -150,7 +149,56 @@ export default {
     }
   },
   mounted() {},
-  watch: {},
+  watch: {
+    "$store.state.editAddress"(val) {
+      // console.log(val);
+      if (val.phone) {
+        let a = val.address.split(",")[0];
+        let b = val.address.split(",")[1];
+        let c = val.address.split(",")[2];
+        let d = val.address.split(",")[3];
+        window.proData_.map(item => {
+          if (item.pv === a) {
+            this.pk = item.pk;
+          }
+        });
+        this.formValidate.province = this.pk;
+        this.change({ value: this.pk, label: a });
+        let b1 = 0;
+        this.cities.map(item => {
+          if (item.cv === b) {
+            b1 = item.ck;
+          }
+        });
+        this.formValidate.city = b1;
+        setTimeout(() => {
+          this.selectCity({ value: b1, label: b });
+        }, 200);
+        setTimeout(() => {
+          let c1 = 0;
+          this.county.map(item => {
+            if (item.cyv === c) {
+              c1 = item.cyk;
+            }
+          });
+          this.formValidate.county = c1;
+          this.selectCounty({ value: c1, label: c });
+          let d1 = 0;
+          this.town.map(item => {
+            if (item.tv === d) {
+              d1 = item.tk;
+            }
+          });
+          this.formValidate.town = d1;
+        }, 300);
+      } else {
+        this.formValidate.province = "";
+        this.formValidate.city = "";
+        this.formValidate.county = "";
+        this.formValidate.town = "";
+      }
+    }
+  },
   computed: {}
 };
 </script>

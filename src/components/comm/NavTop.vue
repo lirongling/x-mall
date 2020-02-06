@@ -18,6 +18,7 @@
                   @on-blur="searchFocus(-2)"
                 />
               </div>
+
               <div
                 class="searchs"
                 :class="{'suggest-show' :count>0}"
@@ -30,6 +31,7 @@
                       v-for="item in searchResult"
                       :key="item.productId"
                       class="search-item"
+                      @click=" goodsDetails(item.productId)"
                     >{{item.productName}}</div>
                   </div>
                 </div>
@@ -54,12 +56,17 @@
                 </div>
               </div>
             </div>
-            <div class="list-item">全部商品</div>
+            <div class="list-item">
+              <a href="/goods">全部商品</a>
+            </div>
             <div class="list-item">捐赠</div>
+            <div class="split">
+              <Divider type="vertical" />
+            </div>
           </div>
-          <Divider type="vertical" />
+
           <div class="nav-aside flex">
-            <NavAside></NavAside>
+            <!-- <NavAside></NavAside> -->
           </div>
         </div>
       </div>
@@ -84,9 +91,23 @@ export default {
   },
   props: {},
   methods: {
+    // 跳转到所有商品页面
+    jumpGoods() {
+      this.$router.push("/goods");
+    },
     // 输入款获取失去焦点   搜索框鼠标移入移出事件
     searchFocus(num) {
       this.count += num;
+    },
+    // 跳转到详情页
+    goodsDetails(productId) {
+      this.count = 0;
+      const { href } = this.$router.resolve({
+        name: "goodsDetails",
+        query: { productId: productId }
+      });
+      window.open(href, "_blank");
+      // window.open(`/goodsDetails?productId=${productId}`, "_blank");
     },
     // 搜索
     search() {
@@ -95,6 +116,7 @@ export default {
         .then(res => {
           if (res.code === 200) {
             this.searchResult = res.data;
+            console.log(res);
             if (res.data.length > 0) {
               this.history();
             }
@@ -174,6 +196,9 @@ export default {
     // 添加搜索
     addSearch(item) {
       this.searchText = item;
+      setTimeout(() => {
+        this.count = 1;
+      }, 500);
     }
   },
   beforeMount() {
@@ -228,11 +253,13 @@ export default {
       margin-right: 22px;
     }
     .nav-aside {
+      width: 102px;
       // transform: translate3d(0, 59px, 0);
       // transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
     }
   }
 }
+
 .cart-num {
   position: absolute;
   left: 30px;
@@ -252,7 +279,11 @@ export default {
   // background: #635f5f;
   cursor: pointer;
 }
-
+.split {
+  position: relative;
+  right: 20px;
+  // padding-left: -160px;
+}
 .list-item {
   width: 110px;
   color: #c8c8c8;
@@ -260,6 +291,9 @@ export default {
   padding: 0 25px;
   cursor: pointer;
   transition: all 0.15s ease-out;
+  a {
+    color: #c8c8c8;
+  }
 }
 .suggest-show {
   display: block !important;

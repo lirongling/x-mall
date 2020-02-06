@@ -48,10 +48,28 @@ export default {
         .catch(err => {
           console.log(err);
         });
+    },
+    // 查询购物车
+    getCarts() {
+      this.$api
+        .getCarts()
+        .then(res => {
+          console.log(res);
+          this.$store.state.carNumber = 0;
+          if (res.code === 200) {
+            this.$store.state.carList = res.data;
+            res.data.map(item => {
+              item.isChecked = false;
+              this.$store.state.carNumber += item.count;
+            });
+          }
+        })
+        .catch(err => {});
     }
   },
   beforeMount() {
     this.getHome();
+    this.getCarts();
   },
   mounted() {},
   watch: {},

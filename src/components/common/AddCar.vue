@@ -7,7 +7,7 @@
           <img :src="productImageBig" alt />
         </div>
       </div>
-      <Button>现在购买</Button>
+      <Button @click="nowBuy">现在购买</Button>
     </div>
     <div class="bt flex" v-else>
       <div
@@ -20,7 +20,7 @@
           <img :src="productImageBig" alt />
         </div>
       </div>
-      <Button>现在购买</Button>
+      <Button>查看详情</Button>
     </div>
   </div>
 </template>
@@ -50,6 +50,10 @@ export default {
     count: {
       type: [Number, String],
       default: 1
+    },
+    goodDetails: {
+      type: Object,
+      default: () => {}
     }
   },
   methods: {
@@ -141,6 +145,17 @@ export default {
           console.log(err);
         });
       // this.productNum = num;
+    },
+    // 现在购买
+    nowBuy() {
+      this.goodDetails.count = this.count;
+      let checkedouts = [];
+      checkedouts.push(this.goodDetails);
+
+      this.$router.push({
+        name: "checkedout",
+        query: { shopList: JSON.stringify(checkedouts) }
+      });
     }
   },
   mounted() {},

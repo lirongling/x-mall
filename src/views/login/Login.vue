@@ -44,7 +44,7 @@
               <Button
                 type="primary"
                 long
-                :disabled="!(userCode&&passCode)"
+                :disabled="isDisabled"
                 @click="handleSubmit('formCustom')"
               >登录</Button>
               <br />
@@ -162,6 +162,11 @@ export default {
               localStorage.setItem("loginMsg", JSON.stringify(userMsg));
               localStorage.setItem("lastTime", new Date().getTime());
               this.$store.state.userInfo = userMsg;
+              if (this.formCustom.single) {
+                localStorage.setItem("checkUser", JSON.stringify(userMsg));
+              } else {
+                localStorage.removeItem("checkUser");
+              }
             } else if (res.code === 500) {
               this.refresh();
               this.$Message.warning(res.msg);
@@ -193,9 +198,28 @@ export default {
     localStorage.removeItem("login");
     next();
   },
+  beforeMount() {
+    if (JSON.parse(localStorage.getItem("checkUser"))) {
+      let a = JSON.parse(localStorage.getItem("checkUser"));
+      this.formCustom.username = a.username;
+      this.formCustom.password = a.password;
+      this.formCustom.single = true;
+    }
+  },
   mounted() {},
   watch: {},
-  computed: {}
+  computed: {
+    isDisabled() {
+      if (
+        (this.userCode && this.passCode) ||
+        localStorage.getItem("checkUser")
+      ) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+  }
 };
 </script>
 

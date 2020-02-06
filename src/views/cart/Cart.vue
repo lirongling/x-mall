@@ -104,7 +104,8 @@ export default {
     return {
       isCheked: false,
       checkAll: false,
-      carList: []
+      carList: [],
+      checkedouts: []
     };
   },
   components: {
@@ -165,7 +166,6 @@ export default {
     // 全选
     checkedAll() {
       this.checkAll = !this.checkAll;
-      console.log(this.carList);
       this.carList.map(item => {
         item.isChecked = this.checkAll;
       });
@@ -225,6 +225,7 @@ export default {
         }
       });
       this.$store.state.checkedout = checkedouts;
+      this.checkedouts = checkedouts;
       this.total();
       return num;
     },
@@ -234,7 +235,10 @@ export default {
     },
     // 跳转到结算页面
     checkedout() {
-      this.$router.push("/checkedout");
+      this.$router.push({
+        name: "checkedout",
+        query: { shopList: JSON.stringify(this.checkedouts) }
+      });
     }
   },
   mounted() {

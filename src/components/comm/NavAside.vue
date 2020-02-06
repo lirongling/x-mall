@@ -29,33 +29,40 @@
                 <li>
                   <a href="/user/coupon" class>我的优惠</a>
                 </li>
-                <li>
-                  <a @click="excit">退出</a>
+                <li @click="excit">
+                  <a>退出</a>
                 </li>
               </ul>
             </div>
           </div>
         </Poptip>
       </div>
-      <Poptip trigger="hover" placement="bottom-end" width="360" v-model="$store.state.carVisible">
-        <div class="shop flex">
-          <div class="cart-img"></div>
-          <div
-            ref="cartnum"
-            class="cart-num"
-            :class="{'cart-nums': $store.state.carNumber>0}"
-          >{{this.$store.state.carNumber}}</div>
-        </div>
-        <div class="api slot-content flex" slot="content">
-          <div v-if="$store.state.carNumber>0" class="cars">
-            <CarList></CarList>
+      <div>
+        <Poptip
+          trigger="hover"
+          placement="bottom-end"
+          width="360"
+          v-model="$store.state.carVisible"
+        >
+          <div class="shop flex">
+            <div class="cart-img"></div>
+            <div
+              ref="cartnum"
+              class="cart-num"
+              :class="{'cart-nums': $store.state.carNumber>0}"
+            >{{this.$store.state.carNumber}}</div>
           </div>
-          <div class="cart-con flex" v-else>
-            <img src="../../assets/images/cart-empty-new.png" alt />
-            <p>您的购物车竟然是空的!</p>
+          <div class="api slot-content flex" slot="content">
+            <div v-if="$store.state.carNumber>0" class="cars">
+              <CarList></CarList>
+            </div>
+            <div class="cart-con flex" v-else>
+              <img src="../../assets/images/cart-empty-new.png" alt />
+              <p>您的购物车竟然是空的!</p>
+            </div>
           </div>
-        </div>
-      </Poptip>
+        </Poptip>
+      </div>
     </div>
   </div>
 </template>
@@ -81,6 +88,7 @@ export default {
     excit() {
       localStorage.removeItem("loginMsg");
       this.$store.state.userInfo = null;
+      this.$store.state.carNumber = 0;
     },
     // 购物车数量动画
     numberScale() {

@@ -122,8 +122,7 @@ export default {
       }
       .item-desc {
         margin-left: 18px;
-        // width: 205px;
-        // height: 80px;
+
         .cart-cell {
           h4 {
             color: #000;
