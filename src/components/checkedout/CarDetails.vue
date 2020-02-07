@@ -10,7 +10,7 @@
       <div>
         <ul class="cart-group">
           <li class="cart-items flex" v-for="(item,index) in shopList" :key="index">
-            <div class="title-items flex">
+            <div class="title-items flex" @click="goodsDetails(item.productId)">
               <div class="items-thumb">
                 <img :src="item.productImageBig" :alt="item.productName" />
               </div>
@@ -48,7 +48,17 @@ export default {
   },
   components: {},
   props: {},
-  methods: {},
+  methods: {
+    // 跳转到详情页
+    goodsDetails(productId) {
+      const { href } = this.$router.resolve({
+        name: "goodsDetails",
+        query: { productId: productId }
+      });
+      window.open(href, "_blank");
+      // window.open(`/goodsDetails?productId=${productId}`, "_blank");
+    }
+  },
   beforeMount() {
     this.shopList = JSON.parse(this.$route.query.shopList);
     console.log(this.shopList);
@@ -79,6 +89,7 @@ export default {
     border-bottom-color: rgba(0, 0, 0, 0.08);
   }
   .title-items {
+    cursor: pointer;
     flex: 1;
     justify-content: flex-start;
   }

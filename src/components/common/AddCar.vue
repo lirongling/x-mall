@@ -109,24 +109,28 @@ export default {
     },
     // 加入购物车
     addCart(productId, event) {
-      this.$api
-        .addCart({ productId: productId, count: this.count })
-        .then(res => {
-          console.log(res);
-          if (res.code === 200) {
-            this.showMoveImg = true;
-            this.$store.state.carVisible = true;
+      if (this.$store.state.userInfo.length === 0) {
+        this.$router.push("/login");
+      } else {
+        this.$api
+          .addCart({ productId: productId, count: this.count })
+          .then(res => {
+            console.log(res);
+            if (res.code === 200) {
+              this.showMoveImg = true;
+              this.$store.state.carVisible = true;
 
-            // this.editNum(productId, this.count);
-            this.getCarts();
-            this.$store.state.carNumber += this.count;
-            this.moveImg();
-          }
-          // console.log(res);
-        })
-        .catch(err => {
-          console.log(err);
-        });
+              // this.editNum(productId, this.count);
+              this.getCarts();
+              this.$store.state.carNumber += this.count;
+              this.moveImg();
+            }
+            // console.log(res);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
     },
     editNum(id, num) {
       let a = { productId: this._id, count: num };
@@ -148,14 +152,18 @@ export default {
     },
     // 现在购买
     nowBuy() {
-      this.goodDetails.count = this.count;
-      let checkedouts = [];
-      checkedouts.push(this.goodDetails);
+      if (this.$store.state.userInfo.length === 0) {
+        this.$router.push("/login");
+      } else {
+        this.goodDetails.count = this.count;
+        let checkedouts = [];
+        checkedouts.push(this.goodDetails);
 
-      this.$router.push({
-        name: "checkedout",
-        query: { shopList: JSON.stringify(checkedouts) }
-      });
+        this.$router.push({
+          name: "checkedout",
+          query: { shopList: JSON.stringify(checkedouts) }
+        });
+      }
     }
   },
   mounted() {},

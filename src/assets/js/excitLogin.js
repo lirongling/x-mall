@@ -12,8 +12,8 @@ function checkTimeout() {
 
     currentTime = new Date().getTime(); //更新当前时间
     lastTime = localStorage.getItem("lastTime");
-    // console.log(currentTime - lastTime);
-    // console.log(timeOut);
+    console.log(currentTime - lastTime);
+    console.log(timeOut);
 
     if (currentTime - lastTime > timeOut) { //判断是否超时
         // console.log("超时");
@@ -21,7 +21,11 @@ function checkTimeout() {
         // var newUrl = url.match(/(\S*)#/)[1];
         // console.log(this.$route.name);
         if (localStorage.getItem("loginMsg") && !localStorage.getItem("login")) {
+            let userMsg = JSON.parse(localStorage.getItem("loginMsg"))
+            localStorage.setItem("checkUser", JSON.stringify(userMsg));
+            localStorage.removeItem("loginMsg");
             window.open('/login', '_self');
+
         }
     }
 }

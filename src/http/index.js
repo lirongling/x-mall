@@ -2,6 +2,7 @@
 import axios from 'axios'
 import qs from 'qs'
 import store from '../store'
+import Loading from 'view-design'
 
 // let loading = null
 
@@ -23,9 +24,8 @@ service.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencod
 
 // 请求拦截器
 service.interceptors.request.use(config => {
-    // loading = Loading.service({
-    //     text: '正在加载中......'
-    // })
+
+    Loading.Spin.show();
     // store.state.isLoading = true;
     let token = localStorage.getItem('adminToken')
         // 每次请求 都在请求头带上token
@@ -41,6 +41,7 @@ service.interceptors.request.use(config => {
 
 // 响应拦截器
 service.interceptors.response.use(response => {
+    Loading.Spin.hide();
     setTimeout(() => {
             // store.state.isLoading = false;
         }, 200)

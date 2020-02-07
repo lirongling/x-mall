@@ -4,10 +4,10 @@
       <div class="nav-cart-items">
         <ul>
           <li class="cart-item flex" v-for="(item,index) in $store.state.carList" :key="index">
-            <div class="item-thumb">
+            <div class="item-thumb" @click="goodsDetails(item.productId)">
               <img :src="item.productImageBig" :alt="item.productName" />
             </div>
-            <div class="item-desc flex">
+            <div class="item-desc flex" @click="goodsDetails(item.productId)">
               <div class="cart-cell">
                 <h4 class="ellipsis">
                   <a>{{item.productName}}</a>
@@ -66,6 +66,15 @@ export default {
     // 跳转到购物车
     jumpCar() {
       this.$router.push("/cart");
+    },
+    // 跳转到详情页
+    goodsDetails(productId) {
+      const { href } = this.$router.resolve({
+        name: "goodsDetails",
+        query: { productId: productId }
+      });
+      window.open(href, "_blank");
+      // window.open(`/goodsDetails?productId=${productId}`, "_blank");
     }
   },
   beforeMount() {},

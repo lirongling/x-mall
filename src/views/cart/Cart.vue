@@ -26,10 +26,13 @@
                   @click="checkss(item)"
                 ></div>
 
-                <div class="items-thumb">
+                <div class="items-thumb" @click="goodsDetails(item.productId)">
                   <img :src="item.productImageBig" :alt="item.productName" />
                 </div>
-                <div class="name ellipsis">{{item.productName}}</div>
+                <div
+                  class="name ellipsis"
+                  @click="goodsDetails(item.productId)"
+                >{{item.productName}}</div>
               </div>
               <div class="table-right flex">
                 <div class="price1 title-item">￥ {{item.salePrice}}</div>
@@ -133,6 +136,15 @@ export default {
     },
     delOnly(productId, index) {
       this.confirm(productId, index);
+    },
+    // 跳转到详情页
+    goodsDetails(productId) {
+      const { href } = this.$router.resolve({
+        name: "goodsDetails",
+        query: { productId: productId }
+      });
+      window.open(href, "_blank");
+      // window.open(`/goodsDetails?productId=${productId}`, "_blank");
     },
     // 删除购物车商品
     delCart(productId, index) {

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="nav-aside flex">
-      <div class="user pr" @click="login" v-if="$store.state.userInfo===null"></div>
+      <div class="user pr" @click="login" v-if="$store.state.userInfo.length===0"></div>
       <div v-else class="users">
         <Poptip trigger="hover" placement="bottom" width="168">
           <div class="user pr"></div>
@@ -87,7 +87,7 @@ export default {
     //退出登录
     excit() {
       localStorage.removeItem("loginMsg");
-      this.$store.state.userInfo = null;
+      this.$store.state.userInfo = "";
       this.$store.state.carNumber = 0;
     },
     // 购物车数量动画
